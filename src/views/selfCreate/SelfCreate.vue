@@ -704,8 +704,8 @@ export default {
                                 processData.tags = data.collectable.tags.map(item => item.name);
                                 processData.title = data.collectable.title;
                                 processData.creatorAccount = data.user.wallet ? data.user.wallet : false;
-                                processData.creatorProfilePicture =  data.user.avatar_image ? data.user.avatar_image : false;
-                                processData.creatorUsername =  data.user.username ? data.user.username : false;
+                                processData.creatorProfilePicture = data.user.avatar_image ? data.user.avatar_image : false;
+                                processData.creatorUsername = data.user.username ? data.user.username : false;
                                 processData.tempMediaUrl = previewMedia?.[0]?.url;
                                 processData.skipFormNavigationCheck = true;
                                 processData.liveListingUrl = selfUrl() + 'drops/secondary/' + data.slug;

@@ -15,7 +15,16 @@
                         <label class="font-semibold uppercase text-md text-black">Type</label>
                     </div>
                     <div class="selection-container mb-6">
-                        <div class="selection-option-wrapper" :class="data.selectedType === 'auction' ? 'active-selection-option' : 'inactive-selection-option'">
+                        <div class="selection-option-wrapper"
+                            :class="data.selectedType === 'auction'
+                                ? 'active-selection-option'
+                                : (
+                                    (data.disabledListingTypesMap[data.selectedType] ?? false)
+                                    ? 'disabled-selection-option'
+                                    : 'inactive-selection-option'
+                                )
+                            "
+                        >
                             <div
                                 class="selection-option cursor-pointer"
                                 @click="setSelectedType('auction', unitCountField)"
@@ -382,6 +391,9 @@ export default {
 
         const data = reactive({
             selectedType: props.listingTypeData ? props.listingTypeData : null,
+            disabledListingTypesMap: {
+              'auction': props.unitData === 1,
+            },
             price: false,
             isNextStepReady: false,
             openingTime: props.openingTimeUnixData && new Date(props.openingTimeUnixData * 1000) || false,
@@ -752,5 +764,9 @@ export default {
         background-color: white;
         border-radius: 10px;
         padding: 2px;
+    }
+
+    .disabled-selection-option {
+      pointer-events: none;
     }
 </style>
