@@ -515,29 +515,29 @@ export default {
         const seenSaleBuilderContract = ref({});
 
         watchEffect(async () => {
-            let contract = await useV3AuctionBuilderContractNetworkReactive(true);
-            seenAuctionBuilderContract.value = contract.state;
+            const { auctionBuilderContract } = await useV3AuctionBuilderContractNetworkReactive(true);
+            seenAuctionBuilderContract.value = auctionBuilderContract.value;
         })
 
         watchEffect(async () => {
-            let contract = await useV3SaleBuilderContractNetworkReactive(true);
-            seenSaleBuilderContract.value = contract.state;
+            const { saleBuilderContract } = await useV3SaleBuilderContractNetworkReactive(true);
+            seenSaleBuilderContract.value = saleBuilderContract.value;
         })
 
         watchEffect(async () => {
-            let contract = await useV3NftContractNetworkReactive(true);
-            seenNFTContract.value = contract.state;
+            const { nftContract } = await useV3NftContractNetworkReactive(true);
+            seenNFTContract.value = nftContract.value;
         })
 
         watchEffect(async () => {
             // Assume no access
             if(account?.value && (account?.value !== processData.lastCheckedAccountForApproval)) {
                 processData.hasApprovedMarketPlaceAsOperator = false;
-                if(seenNFTContract.value.contract && (Number(chainId.value) > 0)) {
+                if(seenNFTContract.value && (Number(chainId.value) > 0)) {
                     processData.lastCheckedAccountForApproval = account?.value;
                     // Check that current user has approved the marketplace diamond as an operator for their SEEN NFTs
                     console.log(account?.value, chainIdToMarketDiamond(Number(chainId.value)), Number(chainId.value))
-                    let hasApprovedMarketPlaceAsOperator = await seenNFTContract.value.contract.isApprovedForAll(account?.value, chainIdToMarketDiamond(Number(chainId.value)));
+                    let hasApprovedMarketPlaceAsOperator = await seenNFTContract.value.isApprovedForAll(account?.value, chainIdToMarketDiamond(Number(chainId.value)));
                     console.log({hasApprovedMarketPlaceAsOperator})
                     processData.hasApprovedMarketPlaceAsOperator = hasApprovedMarketPlaceAsOperator;
                 }
@@ -548,8 +548,8 @@ export default {
         })
 
         const approveMarketOperator = async () => {
-            if(seenNFTContract.value.contract && (Number(chainId.value) > 0 && account?.value)) {
-                let nftContract = seenNFTContract.value.contract;
+            if(seenNFTContract.value && (Number(chainId.value) > 0 && account?.value)) {
+                let nftContract = seenNFTContract.value;
                 store.dispatch('application/openModal', 'TransactionModal')
                 try {
                     let tx = await nftContract.setApprovalForAll(chainIdToMarketDiamond(Number(chainId.value)), true);
@@ -587,16 +587,16 @@ export default {
         const deployListingOnChain = async () => {
             if(
                 (
-                    (data.selectedType === 'auction' && seenAuctionBuilderContract.value.contract) ||
-                    (data.selectedType === 'sale' && seenSaleBuilderContract.value.contract)
+                    (data.selectedType === 'auction' && seenAuctionBuilderContract.value.coract) ||
+                    (data.selectedType === 'sale' && seenSaleBuilderContract.value)
                 )
                 && account?.value
             ) {
                 let useListingContract;
                 if(data.selectedType === 'auction') {
-                    useListingContract = seenAuctionBuilderContract.value.contract;
+                    useListingContract = seenAuctionBuilderContract.value;
                 } else if (data.selectedType === 'sale') {
-                    useListingContract = seenSaleBuilderContract.value.contract;
+                    useListingContract = seenSaleBuilderContract.value;
                 }
                 store.dispatch('application/openModal', 'TransactionModal')
                 try {

@@ -150,17 +150,17 @@ export default {
         const seenHausV3NFTContract = ref({});
 
         watchEffect(async () => {
-            let contract = await useV3NftContractNetworkReactive();
-            seenHausV3NFTContract.value = contract.state;
+            const { nftContract } = await useV3NftContractNetworkReactive();
+            seenHausV3NFTContract.value = nftContract.value;
         })
 
         watchEffect(async () => {
             processData.mediaUrl = false;
             processData.hasInitialised = false;
             const { tokenId, tokenAddress } = props;
-            if(seenHausV3NFTContract.value.contract) {
+            if(seenHausV3NFTContract.value) {
               // Check that current user has access to NFT minting & selling
-              let tokenInfo = await seenHausV3NFTContract.value.contract.getTokenInfo(tokenId)
+              let tokenInfo = await seenHausV3NFTContract.value.getTokenInfo(tokenId)
               // Safe to assume that [2] (the seen IPFS gateway) should work here as this component is only for SEEN.HAUS NFTs
               // If this component becomes used for more than NFTs that have their media on the SEEN.HAUS IPFS gateway
               // Then don't rely on uriToHttp(tokenInfo.uri)[2] or uriToHttp(data.image)[2] working

@@ -77,15 +77,15 @@ export default {
     const latestDistributorUsernameOrAddress = ref(null);
     const latestDistributionDate = ref(null);
     const latestDistributionTransactionEtherscanUrl = ref(null);
-    const distributionPoolContract = ref({});
+    const distributionContract = computed(() => useDistributionContractNetworkReactive().distributionContract);
 
     const loadLatestDistributionBalance = async () => {
 
-      if (!provider?.value || !distributionPoolContract?.value?.contract?.address) {
+      if (!provider?.value || !distributionContract?.value?.contract?.address) {
         return;
       }
 
-      const distributionAddress = distributionPoolContract.value.contract.address;
+      const distributionAddress = distributionContract.value.address;
 
       const temporaryProvider = new Web3Provider(provider.value);
       const balance = await temporaryProvider.getBalance(distributionAddress);
@@ -97,15 +97,10 @@ export default {
       distributionBalance.value = formatEther(balance.toString());
     };
 
-    watchEffect(async () => {
-        let contract = await useDistributionContractNetworkReactive();
-        distributionPoolContract.value = contract.state;
-    })
-
     const loadLatestDistribution = async () => {
-      if(distributionPoolContract.value) {
+      if(distributionContract.value) {
 
-        let events = await distributionPoolContract.value.contract.queryFilter("SwapForMinimum");
+        let events = await distributionContract.value.queryFilter("SwapForMinimum");
 
         let latestDistributionBlockNumber = null;
         let latestDistributionTransaction = null;
@@ -138,7 +133,7 @@ export default {
       if (props.onDistributed) {
         props.onDistributed();
       }
-      if (distributing.value || !distributionEnabled.value || !distributionPoolContract?.value?.contract) {
+      if (distributing.value || !distributionEnabled.value || !distributionContract?.value?.contract) {
         return;
       }
 
@@ -154,7 +149,7 @@ export default {
         });
       });
 
-      const tx = await distributionPoolContract.value.contract.swap({gasPrice}).catch((e) => {
+      const tx = await distributionContract.value.swap({gasPrice}).catch((e) => {
         distributing.value = false;
 
         toast.add({
@@ -209,7 +204,7 @@ export default {
     };
 
     watchEffect(() => {
-      if (!provider?.value && !distributionPoolContract?.value?.contract) {
+      if (!provider?.value && !distributionContract?.value?.contract) {
         return;
       }
 

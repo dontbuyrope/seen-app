@@ -246,7 +246,7 @@ export const OpenSeaAPIService = {
         const collectables = await ApiService.post('collectables/mapWithTokenContractAddress', {tokenContractAddressesToIds});
         const mapped = [];
 
-        let v3NftContract = await useV3NftContractNetworkReactive(true);
+        const { nftContract: v3NftContract } = await useV3NftContractNetworkReactive(true);
 
         for(let asset of assets) {
             const match = collectables.data.find(c => {

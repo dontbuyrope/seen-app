@@ -758,12 +758,12 @@ export default {
         })
 
         const mintNftOnChain = async () => {
-            if(seenNFTContract.value.contract && account?.value) {
+            if(seenNFTContract.value && account?.value) {
                 if(data.selectedType === 'nft-digital') {
                     store.dispatch('application/openModal', 'TransactionModal')
                     try {
                         let royaltyFeeToBasisPoints = (props.secondaryRoyaltyFeeData.toFixed(2) * 100).toFixed(0)
-                        let tx = await seenNFTContract.value.contract.mintDigital(unitField?.value, account?.value, `ipfs://${props.metaDataIpfsHashData}`, royaltyFeeToBasisPoints);
+                        let tx = await seenNFTContract.value.mintDigital(unitField?.value, account?.value, `ipfs://${props.metaDataIpfsHashData}`, royaltyFeeToBasisPoints);
                         store.dispatch('application/setPendingTransactionHash', tx.hash)
                         tx.wait()
                             .then((response) => {

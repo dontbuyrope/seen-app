@@ -530,8 +530,8 @@ export default {
         const marketClerkContract = ref({});
 
         watchEffect(async () => {
-            let contract = await useV3MarketClerkContractNetworkReactive();
-            marketClerkContract.value = contract.state;
+            const { marketClerkContract: contract } = await useV3MarketClerkContractNetworkReactive();
+            marketClerkContract.value = contract.value;
         })
 
         const mediaInputRef = ref(null);
@@ -815,12 +815,12 @@ export default {
                 processData.isMinter = false;
                 processData.isSeller = false;
                 processData.isEscrowAgent = false;
-                if(accessControllerContract.value.contract) {
+                if(accessControllerContract.value) {
                     processData.lastCheckedAccount = account?.value;
                     // Check that current user has access to NFT minting & selling
-                    let hasMinterRole = await accessControllerContract.value.contract.hasRole(roleToBytes["MINTER"], account?.value);
-                    let hasSellerRole = await accessControllerContract.value.contract.hasRole(roleToBytes["SELLER"], account?.value);
-                    let hasEscrowAgentRole = await accessControllerContract.value.contract.hasRole(roleToBytes["ESCROW_AGENT"], account?.value);
+                    let hasMinterRole = await accessControllerContract.value.hasRole(roleToBytes["MINTER"], account?.value);
+                    let hasSellerRole = await accessControllerContract.value.hasRole(roleToBytes["SELLER"], account?.value);
+                    let hasEscrowAgentRole = await accessControllerContract.value.hasRole(roleToBytes["ESCROW_AGENT"], account?.value);
                     processData.isMinter = hasMinterRole;
                     processData.isSeller = hasSellerRole;
                     processData.isEscrowAgent = hasEscrowAgentRole;

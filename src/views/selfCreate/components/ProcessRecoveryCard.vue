@@ -156,8 +156,8 @@ export default {
             processData.hasInitialised = false;
             const { consignment } = props;
             let tokenId = consignment.tokenId;
-            if(seenHausV3NFTContract.value.contract) {
-              let tokenInfo = await seenHausV3NFTContract.value.contract.getTokenInfo(tokenId)
+            if(seenHausV3NFTContract.value) {
+              let tokenInfo = await seenHausV3NFTContract.value.getTokenInfo(tokenId)
               // Safe to assume that [2] (the seen IPFS gateway) should work here as this component is only for SEEN.HAUS NFTs
               // If this component becomes used for more than NFTs that have their media on the SEEN.HAUS IPFS gateway
               // Then don't rely on uriToHttp(tokenInfo.uri)[2] or uriToHttp(data.image)[2] working

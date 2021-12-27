@@ -35,8 +35,8 @@ const useConsignmentRecoveryList = () => {
     };
 
     onBeforeUnmount(() => {
-        if (marketClerkContract) {
-          marketClerkContract.removeAllListeners();
+        if (marketClerkContract.value) {
+          marketClerkContract.value.removeAllListeners();
         }
     });
 

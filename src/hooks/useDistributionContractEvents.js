@@ -1,10 +1,10 @@
-import { useDistributionContract } from "@/hooks/useContract";
+import { useDistributionContractNetworkReactive } from "@/hooks/useContract";
 
 const useDistributionContractEvents = () => {
-    // TODO in a way that works with useDistributionContractNetworkReactive
-    const contract = useDistributionContract(false);
+    const { distributionContract } = useDistributionContractNetworkReactive();
+    const distributionContract = computed(() => distributionContract.value);
     const getDistributionEvents = async () => {
-        return await contract.queryFilter("SwapForMinimum");
+        return await distributionContract.queryFilter("SwapForMinimum");
     }
 
     return { getDistributionEvents }
