@@ -254,9 +254,11 @@
                         <button class="button outline extended" @click="navigateToLiveListingUrl">
                             <i class="fas fa-eye text-sm icon-left"></i>View
                         </button>
-                        <button class="button outline extended">
-                            <i class="fas fa-share-alt text-sm icon-left"></i>Share
-                        </button>
+                        <social-sharing :setVisibilityOfSocialSharing="setVisibilityOfSocialSharing" :visibilityOfSocialSharing="visibilityOfSocialSharing" :socialSharingUrl="processData.liveListingUrl">
+                          <button @click="visibilityOfSocialSharing=!visibilityOfSocialSharing" class="button outline extended">
+                            Share <i class="px-2 fas fa-share"></i>
+                          </button>
+                        </social-sharing>
                     </div>
                 </div>
             </div>
@@ -270,6 +272,7 @@
 import { ref, reactive, computed, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useMeta } from "vue-meta";
 
 import { useToast } from "primevue/usetoast";
 
@@ -280,6 +283,7 @@ import LightTypography from "@/components/LightTypography.vue";
 import Steps from "@/components/Steps/Steps.vue";
 import useWeb3 from "@/connectors/hooks";
 import useUser from "@/hooks/useUser";
+import useDarkMode from "@/hooks/useDarkMode";
 import { useAccessControllerContractNetworkReactive, useV3MarketClerkContractNetworkReactive } from '@/hooks/useContract.js';
 
 import { CollectablesService } from "@/services/apiService";
@@ -290,6 +294,7 @@ import Initiation from './components/Initiation.vue';
 import Upload from './components/Upload.vue';
 import Mint from './components/Mint.vue';
 import SelfCreateListing from './components/SelfCreateListing.vue';
+import SocialSharing from './components/SocialSharing.vue';
 import DropCardPreview from "@/components/DropCardPreview/DropCardPreview.vue";
 
 import {
@@ -304,6 +309,7 @@ import useCopyClipboard from "@/hooks/useCopyClipboard";
 export default {
     name: "SelfCreateWithRoutes",
     components: {
+        SocialSharing,
         Container,
         UnfencedTitle,
         SubTitle,
@@ -508,6 +514,11 @@ export default {
         }
     },
     async setup() {
+        const { meta } = useMeta({
+            title: "Create",
+        })
+
+        const { darkMode } = useDarkMode();
         const {staticCopy} = useCopyClipboard();
         const store = useStore();
         const { user } = useUser();
@@ -545,6 +556,11 @@ export default {
             profilePicture: false,
             username: false,
         });
+        const visibilityOfSocialSharing = ref(false);
+        const setVisibilityOfSocialSharing = (_visibility) => {
+          visibilityOfSocialSharing.value = _visibility;
+          console.log('yeahh!!', _visibility, visibilityOfSocialSharing.value);
+        }
 
         const { account } = useWeb3();
 
@@ -626,7 +642,7 @@ export default {
             creatorAccount: false,
             creatorProfilePicture: false,
             creatorUsername: false,
-            liveListingUrl: false,
+            liveListingUrl: null,
             skipFormNavigationCheck: false,
             lastCheckedAccount: false,
             collectableState: false,
@@ -837,6 +853,9 @@ export default {
         })
 
         return {
+            darkMode,
+            visibilityOfSocialSharing,
+            setVisibilityOfSocialSharing,
             account,
             openWalletModal,
             mediaInputRef,
