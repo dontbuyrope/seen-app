@@ -27,21 +27,21 @@
   />
 </template>
 
-<script lang="ts">
+<script>
 import {ref, watchEffect, computed} from "vue";
 import BigNumber from "bignumber.js";
 
-import DropCardPreview from "@/components/DropCardPreview/DropCardPreview.vue";
+import DropCardPreview from "@/components/DropCardPreview/DropCardPreview";
 
-import Tag from "@/components/PillsAndTags/Tag.vue";
-import PriceDisplay from "@/components/PillsAndTags/PriceDisplay.vue";
-import LiveIndicator from "@/components/PillsAndTags/LiveIndicator.vue";
-import ProgressTimer from "@/components/Progress/ProgressTimer.vue";
-import ProgressBar from "@/components/Progress/ProgressBar.vue";
-import UserBadge from "./PillsAndTags/UserBadge.vue";
-import MediaLoader from "@/components/Media/MediaLoader.vue";
+import Tag from "@/components/PillsAndTags/Tag";
+import PriceDisplay from "@/components/PillsAndTags/PriceDisplay";
+import LiveIndicator from "@/components/PillsAndTags/LiveIndicator";
+import ProgressTimer from "@/components/Progress/ProgressTimer";
+import ProgressBar from "@/components/Progress/ProgressBar";
+import UserBadge from "./PillsAndTags/UserBadge";
+import MediaLoader from "@/components/Media/MediaLoader";
 import useDarkMode from '@/hooks/useDarkMode';
-import useCollectableInformation from "@/hooks/useCollectableInformation.js";
+import useCollectableInformation from "@/hooks/useCollectableInformation";
 
 export default {
   name: "ProductCard",

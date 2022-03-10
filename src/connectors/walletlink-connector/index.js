@@ -1,5 +1,6 @@
 import AbstractConnector from "@/connectors/abstract-connector";
 import {CHAIN_ID_ETHEREUM_MAINNET} from "@/constants/ChainIds";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 const CHAIN_ID = CHAIN_ID_ETHEREUM_MAINNET
 
@@ -14,7 +15,7 @@ export default class WalletLinkConnector extends AbstractConnector {
         this.appName = appName;
         this.appLogoUrl = appLogoUrl
         this.darkMode = darkMode || false
-        this.name = 'WalletLink';
+        this.name = 'Coinbase Wallet';
         // this.handleChainChanged = this.handleChainChanged.bind(this)
         // this.handleAccountsChanged = this.handleAccountsChanged.bind(this)
         // this.handleDisconnect = this.handleDisconnect.bind(this)
@@ -52,8 +53,7 @@ export default class WalletLinkConnector extends AbstractConnector {
 
     async activate() {
         if (!this.walletLink) {
-            const WalletLink = await import('walletlink').then(m => m?.default ?? m)
-            this.walletLink = new WalletLink({
+            this.walletLink = new CoinbaseWalletSDK({
                 appName: this.appName,
                 darkMode: this.darkMode,
                 ...(this.appLogoUrl ? {appLogoUrl: this.appLogoUrl} : {})

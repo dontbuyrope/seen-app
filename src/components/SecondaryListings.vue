@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import {ref, watchEffect, computed} from "vue";
 
 import SecondaryListingListItem from "@/components/SecondaryListingListItem.vue";

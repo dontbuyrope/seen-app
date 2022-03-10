@@ -143,7 +143,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import {ref, watchEffect, computed} from "vue";
 import BigNumber from "bignumber.js";
 

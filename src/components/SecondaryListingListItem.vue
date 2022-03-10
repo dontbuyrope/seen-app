@@ -28,7 +28,7 @@
   />
 </template>
 
-<script lang="ts">
+<script>
 import {ref, watchEffect, computed} from "vue";
 import { useRouter } from "vue-router";
 import BigNumber from "bignumber.js";
